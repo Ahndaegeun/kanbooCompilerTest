@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<div class="modal">
+    <select name="type">
+        <option value="dir">dir</option>
+        <option value="file">file</option>
+    </select>
+    <input type="text" name="dir" value="src.">
+    <input type="text" name="name">
+    <button type="button" class="add">add</button>
+</div>
+
+<hr>
+
+<div class="box">
+    <input type="text" class="file-name" placeholder="fileName">
+    <input type="text" class="file-path" placeholder="filePath" value="src/vo/">
+    <textarea class="file-detail"></textarea>
+    <button type="button" class="save">save</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script>
+    const addBtn = document.querySelector(".add")
+    const saveBtn = document.querySelector(".save")
+    const type = document.querySelector("[name='type']")
+    const dir = document.querySelector("[name='dir']")
+    const name = document.querySelector("[name='name']")
+    const fileDetail = document.querySelector(".file-detail")
+    const fileName = document.querySelector(".file-name")
+    const filePath = document.querySelector(".file-path")
+
+
+    const callAdd = () => {
+        const _data = {
+            project: 1,
+            type: type.value,
+            path: dir.value,
+            name: name.value
+        }
+
+        if(_data.path.substring(_data.path.length - 1, _data.path.length) === '.') {
+            _data.path = _data.path.substring(0, _data.path.length - 1).replaceAll(".", "/")
+        } else {
+            _data.path = _data.path.replaceAll(".", "/")
+        }
+
+        console.log(_data)
+
+        $.ajax({
+            url: '/addDir',
+            type: "post",
+            data: _data,
+            success: function(res) {
+                console.log(res)
+            }
+        })
+    }
+
+    const callSave = () => {
+        const _data = {
+            project: 1,
+            fileName: fileName.value,
+            fileDetail: fileDetail.value,
+            filePath: filePath.value
+        }
+
+
+
+        $.ajax({
+            url: '/saveFile',
+            type: "post",
+            data: _data,
+            success: function(res) {
+                console.log(res)
+            }
+        })
+    }
+
+    addBtn.addEventListener('click', () => {
+        if(dir.value.substring(0, 4) !== "src.") {
+            alert('최상위 폴더는 src')
+        } else {
+            callAdd()
+        }
+    })
+
+    saveBtn.addEventListener('click', () => {
+        callSave()
+    })
+</script>
+</body>
+</html>
