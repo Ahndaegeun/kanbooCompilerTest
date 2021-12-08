@@ -24,8 +24,8 @@ public class MainController {
 
     @ResponseBody
     @PostMapping("/compile")
-    public String runCompile(CompilerContent compilerContent) {
-        return compilerService.runCompile(compilerContent);
+    public String runCompile(String projectIdx) {
+        return compilerService.runCompile(projectIdx);
     }
 
     @PostMapping("/addDir")
@@ -39,4 +39,17 @@ public class MainController {
     public boolean saveFile(@RequestParam Map<String, Object> map) {
         return compilerService.saveFile(map);
     }
+
+    @PostMapping("/delFile")
+    @ResponseBody
+    public boolean delFile(@RequestParam Map<String, Object> map) {
+        return compilerService.delFile(map);
+    }
+
+    @PostMapping("/delDir")
+    @ResponseBody
+    public boolean delDir(@RequestParam Map<String, Object> map) {
+        return compilerService.delDir(map.get("delDirPath") + "");
+    }
+
 }

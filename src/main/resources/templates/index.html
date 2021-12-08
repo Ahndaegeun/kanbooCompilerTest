@@ -26,6 +26,21 @@
     <button type="button" class="save">save</button>
 </div>
 
+<hr>
+
+<div class="del-file">
+    <input type="text" class="del-name" value="Member">
+    <input type="text" class="del-path" value="1/src/vo/">
+    <button type="button" class="del-btn">delFile</button>
+</div>
+
+<hr>
+
+<div class="del-dir">
+    <input type="text" class="del-dir-path" value="1/src/vo">
+    <button type="button" class="del-dir-btn">delDir</button>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script>
     const addBtn = document.querySelector(".add")
@@ -36,7 +51,11 @@
     const fileDetail = document.querySelector(".file-detail")
     const fileName = document.querySelector(".file-name")
     const filePath = document.querySelector(".file-path")
-
+    const delName = document.querySelector(".del-name")
+    const delPath = document.querySelector(".del-path")
+    const delBtn = document.querySelector(".del-btn")
+    const delDirPath = document.querySelector('.del-dir-path')
+    const delDirBtn = document.querySelector('.del-dir-btn')
 
     const callAdd = () => {
         const _data = {
@@ -72,14 +91,48 @@
             filePath: filePath.value
         }
 
-
-
         $.ajax({
             url: '/saveFile',
             type: "post",
             data: _data,
             success: function(res) {
                 console.log(res)
+            }
+        })
+    }
+
+    const callDel = () => {
+        const _data = {
+            delName: delName.value,
+            delPath: delPath.value
+        }
+
+        $.ajax({
+            url: '/delFile',
+            data: _data,
+            type: "post",
+            success: res => {
+                if(res) {
+                    alert('SUCCESS')
+                }
+            }
+        })
+    }
+
+    const callDelDir = () => {
+        const _data = {
+            delDirPath: delDirPath.value
+        }
+
+        $.ajax({
+            url: "/delDir",
+            data: _data,
+            type: "post",
+            success: res => {
+                console.log(res)
+                if(res) {
+                    alert("SUCCESS")
+                }
             }
         })
     }
@@ -95,6 +148,15 @@
     saveBtn.addEventListener('click', () => {
         callSave()
     })
+
+    delBtn.addEventListener('click', () => {
+        callDel()
+    })
+
+    delDirBtn.addEventListener('click', () => {
+        callDelDir()
+    })
+
 </script>
 </body>
 </html>

@@ -6,13 +6,7 @@ import com.example.compilertest.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
 import java.util.Map;
 
 @Service
@@ -26,9 +20,8 @@ public class CompilerService {
 
     private static final String rootPath = "/Users/andaegeun/Desktop/compilerTest/src/main/resources/static/projectList/";
 
-    public String runCompile(CompilerContent compilerContent) {
-
-        return null;
+    public String runCompile(String projectIdx) {
+        return dockerService.dockerCompile(projectIdx);
     }
 
     public boolean createFileOrDir(Map<String, Object> map) {
@@ -41,11 +34,6 @@ public class CompilerService {
         }
 
         return addFile(rootPath + projectName, projectPath, target);
-    }
-
-    public boolean deleteFileOrDir(Map<String, Object> map) {
-
-        return false;
     }
 
     public boolean saveFile(Map<String, Object> map) {
@@ -101,20 +89,43 @@ public class CompilerService {
         return true;
     }
 
-    private boolean delDir() {
+    public boolean delDir(String path) {
+        return loopDelDir(rootPath + path);
+    }
+
+    private boolean loopDelDir(String path) {
+        boolean result = false;
+        File folder = new File(path);
+        System.out.println(path);
+        if(folder.exists()) {
+            File[] fileList = folder.listFiles();
+
+            for(File file : fileList) {
+                if(file.isFile()) {
+                    file.delete();
+                } else {
+                    System.out.println(file.getPath());
+                    loopDelDir(file.getPath());
+                }
+                file.delete();
+            }
+            result = folder.delete();
+        }
+
+        return result;
+    }
+
+    public boolean delFile(Map<String, Object> map) {
+
+        File file = new File(rootPath + map.get("delPath") + map.get("delName") + ".java");
+
+        if(file.exists()) {
+            if(file.delete()) {
+                return true;
+            }
+        }
 
         return false;
     }
-
-    private boolean delFile() {
-        
-        return false;
-    }
-
-    private String getFile(String path, String fileName) {
-
-        return "";
-    }
-
 
 }
