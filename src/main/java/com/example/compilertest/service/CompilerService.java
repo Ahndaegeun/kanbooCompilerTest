@@ -21,7 +21,8 @@ public class CompilerService {
     private static final String rootPath = "/Users/andaegeun/Desktop/compilerTest/src/main/resources/static/projectList/";
 
     public String runCompile(String projectIdx) {
-        return dockerService.dockerCompile(projectIdx);
+        dockerService.terminalTest();
+        return "";
     }
 
     public boolean createFileOrDir(Map<String, Object> map) {

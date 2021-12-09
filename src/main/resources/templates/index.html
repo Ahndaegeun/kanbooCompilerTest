@@ -41,6 +41,8 @@
     <button type="button" class="del-dir-btn">delDir</button>
 </div>
 
+<button type="button" class="runCompile">runCompile</button>
+
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script>
     const addBtn = document.querySelector(".add")
@@ -56,6 +58,7 @@
     const delBtn = document.querySelector(".del-btn")
     const delDirPath = document.querySelector('.del-dir-path')
     const delDirBtn = document.querySelector('.del-dir-btn')
+    const runCompile = document.querySelector(".runCompile")
 
     const callAdd = () => {
         const _data = {
@@ -137,6 +140,17 @@
         })
     }
 
+    const callRun = () => {
+        $.ajax({
+            url: '/compile',
+            data: {projectIdx: 1},
+            type: "post",
+            success: res => {
+                console.log(res)
+            }
+        })
+    }
+
     addBtn.addEventListener('click', () => {
         if(dir.value.substring(0, 4) !== "src.") {
             alert('최상위 폴더는 src')
@@ -155,6 +169,10 @@
 
     delDirBtn.addEventListener('click', () => {
         callDelDir()
+    })
+
+    runCompile.addEventListener('click',  () => {
+        callRun()
     })
 
 </script>
